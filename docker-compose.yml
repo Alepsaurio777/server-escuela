@@ -44,12 +44,12 @@ services:
     image: stilliard/pure-ftpd:hardened
     container_name: ftp_equipo7
     environment:
-      PUBLICHOST: "localhost"
+      PUBLICHOST: "192.168.1.74"
       FTP_USER_NAME: "alex"
       FTP_USER_PASS: "alex"
       FTP_USER_HOME: "/home/ftpusers/usuario"
     ports:
-      - "21:21"
+      - "2121:21"
       - "30000-30009:30000-30009"
     networks:
       dmz_net:
@@ -65,6 +65,8 @@ services:
       MYSQL_DATABASE: example_db
       MYSQL_USER: example_user
       MYSQL_PASSWORD: example_password
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       lan_net:
         ipv4_address: 192.168.10.21

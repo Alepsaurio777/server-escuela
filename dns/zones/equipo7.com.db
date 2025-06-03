@@ -6,8 +6,8 @@ $TTL    604800
                         2419200         ; Expire
                          604800 )       ; Negative Cache TTL
 ;
-@       IN      NS      dns.equipo7.com.
-dns     IN      A       10.172.10.11
-web     IN      A       10.172.10.12
-ftp     IN      A       10.172.10.13
-archivos IN A 10.172.10.12
+web      IN A 192.168.1.74
+archivos IN A 192.168.1.74
+@        IN A 192.168.1.74   
+dns      IN A 10.172.10.11
+ftp      IN A 10.172.10.13

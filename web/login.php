@@ -4,9 +4,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     require 'db.php';
     $usuario = trim($_POST['usuario']);
     $password = trim($_POST['password']);
-    $stmt = $conn->prepare("SELECT password FROM usuarios WHERE usuario=?");
+    $stmt = $conn->prepare("SELECT password FROM usuario WHERE username=?");
     $stmt->bind_param("s", $usuario);
     $stmt->execute();
+    $stmt->store_result();
+    error_log('Filas encontradas: ' . $stmt->num_rows);
+    $stmt->bind_result($hash);
     $stmt->bind_result($hash);
     if ($stmt->fetch() && password_verify($password, $hash)) {
         $_SESSION['usuario'] = $usuario;
