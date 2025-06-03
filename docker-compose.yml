@@ -12,7 +12,6 @@ networks:
 
 services:
   dns:
-    # Using official Ubuntu/Debian bind9 image instead of the problematic one
     image: ubuntu/bind9:latest
     container_name: dns_equipo7
     volumes:
@@ -26,17 +25,20 @@ services:
         ipv4_address: 10.172.10.11
 
   web:
-    image: nginx
+    build: ./web
     container_name: web_equipo7
     volumes:
-      - ./web:/usr/share/nginx/html
-      - ./ftp_files:/usr/share/nginx/html/archivos
-      - ./web/nginx.conf:/etc/nginx/nginx.conf 
+      - ./web:/var/www/html
+      - ./ftp_files:/var/www/html/archivos
     ports:
       - "8080:80"
     networks:
       dmz_net:
-        ipv4_address: 10.172.10.12      
+        ipv4_address: 10.172.10.12     
+      lan_net:
+        ipv4_address: 192.168.10.12 
+    depends_on:
+      - db_server
 
   ftp:
     image: stilliard/pure-ftpd:hardened
@@ -54,19 +56,6 @@ services:
         ipv4_address: 10.172.10.13
     volumes:
       - ./ftp_files:/home/ftpusers/usuario    
-
-  samba:
-    image: dperson/samba
-    container_name: samba_equipo7
-    command: '-u "equipo7;1234" -s "archivos;/shared;yes;no"'
-    volumes:
-      - ./samba:/shared
-    ports:
-      - "139:139"
-      - "445:445"
-    networks:
-      lan_net:
-        ipv4_address: 192.168.10.20
 
   db_server:
     image: mysql:latest
